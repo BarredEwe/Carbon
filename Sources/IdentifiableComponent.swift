@@ -27,6 +27,50 @@ public extension IdentifiableComponent {
     func buildCells() -> [CellNode] {
         return [CellNode(self)]
     }
+
+    func needChange(for action: AnyActionContent) -> AnyComponent? {
+        guard let contentView = action.view as? Content else { return nil }
+        let component = didChange(with: ActionContent(view: contentView, object: self, indexPath: action.indexPath,
+            userInfo: action.userInfo, type: action.type))
+        return AnyComponent(component)
+    }
+
+    /// Adding an action to a specific type of Action
+    /// - Parameters:
+    ///   - action: Specific type of Action
+    ///   - closure: Сlosure with parameters caused by a specific action
+    /// - Returns: NodeComponent
+    @inlinable
+    func on(_ action: ActionType, _ closure: @escaping ItemClosure<Self>) -> NodeComponent<Self> {
+        return NodeComponent(component: self)
+            .on(action, closure)
+    }
+
+    /// Adding an action to a specific type of Action
+    /// - Parameters:
+    ///   - action: Specific type of Action
+    ///   - closure: Сlosure without parameters caused by a specific action
+    /// - Returns: NodeComponent
+    @inlinable
+    func on(_ action: ActionType, _ closure: @escaping () -> Void) -> NodeComponent<Self> {
+        return NodeComponent(component: self)
+            .on(action, { _ in closure() })
+    }
+
+    /// Typed node with saved actions
+    var nodeComponent: NodeComponent<Self> {
+        return NodeComponent(component: self)
+    }
+
+    @inlinable
+    var cellNode: CellNode {
+        return CellNode(self)
+    }
+
+    @inlinable
+    var viewNode: ViewNode {
+        return ViewNode(self)
+    }
 }
 
 public extension IdentifiableComponent where Self: Hashable {

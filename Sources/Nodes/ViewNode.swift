@@ -3,9 +3,12 @@ import DifferenceKit
 /// The node for view which need not be uniquely identified like header or footer.
 /// Erase the type of component and wrapping it.
 /// This works as an intermediary for `DifferenceKit`.
-public struct ViewNode {
+public class ViewNode {
     /// A type-erased component which wrapped in `self`.
     public var component: AnyComponent
+
+    /// Dictionary of actions by type
+    public var actions = [ActionType: Any]()
 
     /// Create a node wrapping given component.
     ///

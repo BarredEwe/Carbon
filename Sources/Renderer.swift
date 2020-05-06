@@ -42,6 +42,8 @@ open class Renderer<Updater: Carbon.Updater> {
         }
     }
 
+    public weak var actionsDelegate: ActionsDelegate?
+
     /// Returns a current data held in adapter.
     /// When data is set, it renders to the target immediately.
     open var data: [Section] {
@@ -50,9 +52,23 @@ open class Renderer<Updater: Carbon.Updater> {
     }
 
     /// Create a new instance with given adapter and updater.
-    public init(adapter: Updater.Adapter, updater: Updater) {
+    public init(adapter: Updater.Adapter, updater: Updater, actionsDelegate: ActionsDelegate? = nil) {
         self.adapter = adapter
         self.updater = updater
+        self.actionsDelegate = actionsDelegate
+
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveAction),
+                                               name: NSNotification.Name(rawValue: "CarbonNotifications.CellAction"),
+                                               object: nil)
+    }
+
+    public convenience init(adapter: Updater.Adapter, updater: Updater, target: Updater.Target?) {
+        self.init(adapter: adapter, updater: updater)
+        self.target = target
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     /// Render given collection of sections, immediately.
@@ -68,6 +84,19 @@ open class Renderer<Updater: Carbon.Updater> {
         }
 
         updater.performUpdates(target: target, adapter: adapter, data: data)
+    }
+
+    @objc func didReceiveAction(_ notification: Notification) {
+        guard let action = notification.object as? ComponentAction,
+            let view = action.view.superview?.superview,
+            view.superview == target as? UIView,
+            let indexPath: IndexPath = (view as? UITableViewComponentCell).flatMap(adapter.indexPath) ??
+                (view as? UICollectionViewComponentCell).flatMap(adapter.indexPath) ??
+                (view as? UITableViewComponentHeaderFooterView).flatMap(adapter.indexPath),
+            var nodeInfo = adapter.cellNode(for: indexPath).flatMap({ ($0.actions, $0.component) }) ??
+                adapter.viewNode(for: indexPath).flatMap({ ($0.actions, $0.component) }) else { return }
+
+        processAction(action: action, component: nodeInfo.1, actions: nodeInfo.0, indexPath: indexPath)
     }
 
     /// Render given collection of sections skipping nil, immediately.
@@ -110,6 +139,26 @@ open class Renderer<Updater: Carbon.Updater> {
         render {
             Section(id: UniqueIdentifier(), cells: cells)
         }
+    }
+
+    // MARK: Private Methods
+
+    private func processAction(action: ComponentAction, component: AnyComponent, actions: [ActionType: Any], indexPath: IndexPath) {
+        guard let actionComponent = component.as(ComponentAnyActionable.self), let target = target as? UIView else { return }
+        var actionContent = AnyActionContent(view: action.view, component: component, type: action.actionType,
+                                             target: target, indexPath: indexPath, userInfo: action.userInfo)
+
+        processChangeNode(component: component, for: &actionContent)
+        actionsDelegate?.did(action: actionContent)
+        actionContent.component = adapter.component(for: indexPath)
+        actionComponent.call(actionContent, in: actions)
+    }
+
+    private func processChangeNode(component: AnyComponent, for actionContent: inout AnyActionContent) {
+        guard let updatedComponent = component.as(ComponentUpdater.self)?.needChange(for: actionContent),
+            let indexPath = actionContent.indexPath else { return }
+        actionContent.component = updatedComponent
+        adapter.update(anyComponent: updatedComponent, for: indexPath)
     }
 }
 

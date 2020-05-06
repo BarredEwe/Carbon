@@ -34,7 +34,7 @@ import UIKit
 ///             }
 ///         }
 ///     }
-public protocol Component {
+public protocol Component: ComponentAnyActionable, ComponentSelectable, ComponentUpdater {
     /// A type that represents a content to be render on the element of list UI.
     associatedtype Content
 
@@ -121,6 +121,10 @@ public protocol Component {
     /// - Parameter:
     ///   - content: An instance of content going out from display area.
     func contentDidEndDisplay(_ content: Content)
+
+    /// Content change event
+    /// - Parameter action: Provides general information about the event.
+    func didChange(with action: ActionContent<Self>) -> Self
 }
 
 public extension Component {
@@ -187,6 +191,26 @@ public extension Component {
     ///   - content: An instance of content going out from display area.
     @inlinable
     func contentDidEndDisplay(_ content: Content) {}
+
+    @inlinable
+    func didChange(with action: ActionContent<Self>) -> Self {
+        return self
+    }
+
+    @inlinable
+    func didSelect(with view: UIView, at indexPath: IndexPath?) {
+        guard let contentView = (view as? UITableViewComponentCell).flatMap({ $0.contentView }) ??
+            (view as? UICollectionViewComponentCell).flatMap({ $0.contentView }),
+            let objectView = contentView.subviews.first as? Content,
+            let view = objectView as? UIView else { return }
+        ComponentAction(.select, sender: view).invoke()
+    }
+
+    func call(_ action: AnyActionContent, in actions: [ActionType: Any]) {
+        guard let view = action.view as? Content, let allActions = actions as? [ActionType: ItemAction<Self>] else { return }
+        let contect = ActionContent(view: view, object: self, indexPath: action.indexPath, userInfo: action.userInfo, type: action.type)
+        allActions[action.type]?.value(contect)
+    }
 }
 
 public extension Component where Content: UIView {

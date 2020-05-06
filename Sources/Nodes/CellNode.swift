@@ -3,7 +3,7 @@ import DifferenceKit
 /// The node for cell that can be uniquely identified.
 /// Wrapping type-erased identifier and component.
 /// This works as an intermediary for `DifferenceKit`.
-public struct CellNode {
+public class CellNode {
     /// A type-erased identifier that can be used to uniquely
     /// identify the component.
     public var id: AnyHashable
@@ -11,11 +11,15 @@ public struct CellNode {
     /// A type-erased component which wrapped in `self`.
     public var component: AnyComponent
 
+    /// Dictionary of actions by type
+    public var actions = [ActionType: Any]()
+
     /// Create a node wrapping given id and component.
     ///
     /// - Parameters:
     ///   - id: An identifier to be wrapped.
     ///   - component: A component to be wrapped.
+    @inlinable
     public init<I: Hashable, C: Component>(id: I, _ component: C) {
         // This is workaround for avoid redundant `AnyHashable` wrapping.
         if type(of: id) == AnyHashable.self {
@@ -24,7 +28,6 @@ public struct CellNode {
         else {
             self.id = id
         }
-
         self.component = AnyComponent(component)
     }
 
@@ -33,7 +36,7 @@ public struct CellNode {
     /// - Parameter
     ///   - component: A component to be wrapped that can be uniquely identified.
     @inlinable
-    public init<C: IdentifiableComponent>(_ component: C) {
+    public convenience init<C: IdentifiableComponent>(_ component: C) {
         self.init(id: component.id, component)
     }
 
@@ -73,5 +76,12 @@ extension CellNode: CustomDebugStringConvertible {
     @inlinable
     public var debugDescription: String {
         return "CellNode(id: \(id), component: \(component))"
+    }
+}
+
+extension CellNode: ComponentSelectable {
+    public func didSelect(with view: UIView, at indexPath: IndexPath?) {
+        guard let component = self.component(as: ComponentSelectable.self) else { return }
+        component.didSelect(with: view, at: indexPath)
     }
 }

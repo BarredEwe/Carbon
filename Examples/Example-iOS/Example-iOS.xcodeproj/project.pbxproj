@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E3F576A2455A7E800F5CC0B /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3E3F57692455A7E800F5CC0B /* DifferenceKit */; };
 		6B00B0A4233AA23F002A45E5 /* HostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B00B0A3233AA23F002A45E5 /* HostingController.swift */; };
 		6B09264421FE17B300CFEC2F /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B09264321FE17B300CFEC2F /* Footer.swift */; };
 		6B09264621FE183300CFEC2F /* FooterContent.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B09264521FE183300CFEC2F /* FooterContent.xib */; };
@@ -70,8 +71,6 @@
 		6BE9F758235F7CF50023EF98 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6BE9F757235F7CF50023EF98 /* SwipeCellKit */; };
 		B3CA657324338E60000610FD /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3CA657024338E50000610FD /* Carbon.framework */; };
 		B3CA657424338E60000610FD /* Carbon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3CA657024338E50000610FD /* Carbon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B3CA657524338E60000610FD /* DifferenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3CA656724338E4B000610FD /* DifferenceKit.framework */; };
-		B3CA657624338E60000610FD /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B3CA656724338E4B000610FD /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,13 +109,6 @@
 			remoteGlobalIDString = 6B65947921E252E300291AAF;
 			remoteInfo = Carbon;
 		};
-		B3CA657C24338E8E000610FD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B3CA656124338E4B000610FD /* DifferenceKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 6B2DF86D210E2C12004D2D40;
-			remoteInfo = DifferenceKit;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -126,7 +118,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B3CA657624338E60000610FD /* DifferenceKit.framework in Embed Frameworks */,
 				B3CA657424338E60000610FD /* Carbon.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -213,9 +204,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E3F576A2455A7E800F5CC0B /* DifferenceKit in Frameworks */,
 				6BE9F755235F7CBF0023EF98 /* MagazineLayout in Frameworks */,
 				B3CA657324338E60000610FD /* Carbon.framework in Frameworks */,
-				B3CA657524338E60000610FD /* DifferenceKit.framework in Frameworks */,
 				6BE9F758235F7CF50023EF98 /* SwipeCellKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,12 +422,12 @@
 			);
 			dependencies = (
 				B3CA657B24338E8E000610FD /* PBXTargetDependency */,
-				B3CA657D24338E8E000610FD /* PBXTargetDependency */,
 			);
 			name = "Example-iOS";
 			packageProductDependencies = (
 				6BE9F754235F7CBF0023EF98 /* MagazineLayout */,
 				6BE9F757235F7CF50023EF98 /* SwipeCellKit */,
+				3E3F57692455A7E800F5CC0B /* DifferenceKit */,
 			);
 			productName = "Example-iOS";
 			productReference = 6B6594CC21E2619B00291AAF /* Example-iOS.app */;
@@ -470,6 +461,7 @@
 			packageReferences = (
 				6BE9F753235F7CBF0023EF98 /* XCRemoteSwiftPackageReference "MagazineLayout" */,
 				6BE9F756235F7CF50023EF98 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
+				3E3F57682455A7E800F5CC0B /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			productRefGroup = 6B6594CD21E2619B00291AAF /* Products */;
 			projectDirPath = "";
@@ -626,11 +618,6 @@
 			isa = PBXTargetDependency;
 			name = Carbon;
 			targetProxy = B3CA657A24338E8E000610FD /* PBXContainerItemProxy */;
-		};
-		B3CA657D24338E8E000610FD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = DifferenceKit;
-			targetProxy = B3CA657C24338E8E000610FD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -832,6 +819,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3E3F57682455A7E800F5CC0B /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ra1028/DifferenceKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.5;
+			};
+		};
 		6BE9F753235F7CBF0023EF98 /* XCRemoteSwiftPackageReference "MagazineLayout" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/MagazineLayout";
@@ -851,6 +846,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3E3F57692455A7E800F5CC0B /* DifferenceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3E3F57682455A7E800F5CC0B /* XCRemoteSwiftPackageReference "DifferenceKit" */;
+			productName = DifferenceKit;
+		};
 		6BE9F754235F7CBF0023EF98 /* MagazineLayout */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6BE9F753235F7CBF0023EF98 /* XCRemoteSwiftPackageReference "MagazineLayout" */;

@@ -31,6 +31,10 @@ open class UITableViewUpdater<Adapter: UITableViewAdapter>: Updater {
     /// after diffing updated. Default is true.
     open var alwaysRenderVisibleComponents = true
 
+    /// A Bool value indicating whether to update items without a full reload.
+    /// Default is true.
+    open var updateElementWithoutReloading = true
+
     /// A Bool value indicating whether that to reset content offset after
     /// updated if not scrolling. Default is true.
     open var keepsContentOffset = true
@@ -151,7 +155,16 @@ open class UITableViewUpdater<Adapter: UITableViewAdapter>: Updater {
                     }
 
                     if !changeset.elementUpdated.isEmpty {
-                        target.reloadRows(at: changeset.elementUpdated.map { IndexPath(row: $0.element, section: $0.section) }, with: reloadRowsAnimation)
+                        let updatedIndexPaths = changeset.elementUpdated.map { IndexPath(row: $0.element, section: $0.section) }
+                        if updateElementWithoutReloading {
+                            for indexPath in updatedIndexPaths {
+                                let cellNode = adapter.cellNode(at: indexPath)
+                                let cell = target.cellForRow(at: indexPath) as? ComponentRenderable
+                                cell?.render(component: cellNode.component)
+                            }
+                        } else {
+                            target.reloadRows(at: updatedIndexPaths, with: reloadRowsAnimation)
+                        }
                     }
 
                     for (sourcePath, targetPath) in changeset.elementMoved {

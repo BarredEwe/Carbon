@@ -121,6 +121,11 @@ extension UITableViewAdapter: UITableViewDataSource {
         let reuseIdentifier = node.component.reuseIdentifier
         let componentCell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as? UITableViewCell & ComponentRenderable
 
+        componentCell?.accessoryType = node.component(as: ComponentAppearance.self)?.accessoryType ?? .none
+        componentCell?.accessoryView = node.component(as: ComponentAppearance.self)?.accessoryView
+        componentCell?.tintColor = node.component(as: ComponentAppearance.self)?.tintColor
+        componentCell?.selectionStyle = node.component(as: ComponentAppearance.self)?.selectionStyle ?? .default
+
         guard let cell = componentCell, cell.isMember(of: registration.class) else {
             tableView.register(cell: registration, forReuseIdentifier: reuseIdentifier)
             return self.tableView(tableView, cellForRowAt: indexPath)
@@ -180,11 +185,15 @@ extension UITableViewAdapter: UITableViewDelegate {
 
     /// Callback the selected event of cell to the `didSelect` closure.
     open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let didSelect = didSelect else { return }
-
         let node = cellNode(at: indexPath)
         let context = SelectionContext(tableView: tableView, node: node, indexPath: indexPath)
-        didSelect(context)
+        if let cell = context.tableView.cellForRow(at: context.indexPath) {
+            context.node.didSelect(with: cell, at: context.indexPath)
+            context.tableView.deselectRow(at: context.indexPath, animated: true)
+        }
+        if let didSelect = didSelect {
+            didSelect(context)
+        }
 
         // In rare cases, execution such as presenting view controller may be delayed if set the `UITableViewCell.selectionStyle` to `.none`.
         // This is workaround for it.

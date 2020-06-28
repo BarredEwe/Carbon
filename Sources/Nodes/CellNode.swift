@@ -79,9 +79,9 @@ extension CellNode: CustomDebugStringConvertible {
     }
 }
 
-extension CellNode: ComponentSelectable {
+extension CellNode: ComponentAppearance {
     public func didSelect(with view: UIView, at indexPath: IndexPath?) {
-        guard let component = self.component(as: ComponentSelectable.self) else { return }
+        guard let component = self.component(as: ComponentAppearance.self) else { return }
         component.didSelect(with: view, at: indexPath)
     }
 }

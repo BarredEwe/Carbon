@@ -175,11 +175,15 @@ extension UICollectionViewAdapter: UICollectionViewDataSource {
 extension UICollectionViewAdapter: UICollectionViewDelegate {
     /// Callback the selected event of cell to the `didSelect` closure.
     open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let didSelect = didSelect else { return }
-
         let node = cellNode(at: indexPath)
         let context = SelectionContext(collectionView: collectionView, node: node, indexPath: indexPath)
-        didSelect(context)
+        if let cell = context.collectionView.cellForItem(at: context.indexPath) {
+            context.node.didSelect(with: cell, at: context.indexPath)
+            context.collectionView.deselectItem(at: context.indexPath, animated: true)
+        }
+        if let didSelect = didSelect {
+            didSelect(context)
+        }
     }
 
     /// The event that the cell will display in the visible rect.

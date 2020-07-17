@@ -42,11 +42,7 @@ public extension Adapter {
 
     @inlinable
     public func viewNode(for indexPath: IndexPath) -> ViewNode? {
-        switch indexPath.row {
-        case IndexPath.headerComponentIndex: return data[safe: indexPath.section]?.header
-        case IndexPath.footerComponentIndex: return data[safe: indexPath.section]?.footer
-        default: return nil
-        }
+        data.viewNode(for: indexPath)
     }
 
     @inlinable
@@ -98,17 +94,7 @@ public extension Adapter {
     ///   - indexPath: IndexPath by which node should be updated
     @inlinable
     public func update(anyComponent: AnyComponent?, for indexPath: IndexPath?) {
-        guard let indexPath = indexPath else { return }
-        switch indexPath.row {
-        case IndexPath.headerComponentIndex, IndexPath.footerComponentIndex:
-            let node = anyComponent?.as(ComponentUpdater.self)?.componentViewNode
-            if let actions = viewNode(for: indexPath)?.actions { node?.actions = actions }
-            update(node: node, for: indexPath)
-        default:
-            let node = anyComponent?.as(ComponentUpdater.self)?.componentCellNode
-            if let actions = cellNode(for: indexPath)?.actions { node?.actions = actions }
-            update(node: node, for: indexPath)
-        }
+        data.update(anyComponent: anyComponent, for: indexPath)
     }
 
     /// Removing a CellNode object by the passed indexPath

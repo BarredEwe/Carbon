@@ -40,6 +40,25 @@ public extension Array where Element == Section {
         }
     }
 
+    /// Updating AnyComponent object according to the passed indexPath
+    /// - Parameters:
+    ///   - node: AnyComponent object
+    ///   - indexPath: IndexPath by which node should be updated
+    @inlinable
+    mutating func update(anyComponent: AnyComponent?, for indexPath: IndexPath?) {
+        guard let indexPath = indexPath else { return }
+        switch indexPath.row {
+        case IndexPath.headerComponentIndex, IndexPath.footerComponentIndex:
+            let node = anyComponent?.as(ComponentUpdater.self)?.componentViewNode
+            if let actions = viewNode(for: indexPath)?.actions { node?.actions = actions }
+            update(node: node, for: indexPath)
+        default:
+            let node = anyComponent?.as(ComponentUpdater.self)?.componentCellNode
+            if let actions = self[safe: indexPath.section]?.cells[safe: indexPath.row]?.actions { node?.actions = actions }
+            update(node: node, for: indexPath)
+        }
+    }
+
     /// Removing a CellNode object by the passed indexPath
     /// - Parameter indexPath: IndexPath by which node should be deleted
     @inlinable
@@ -75,6 +94,15 @@ public extension Array where Element == Section {
         case IndexPath.headerComponentIndex: return self[safe: indexPath.section]?.header?.component
         case IndexPath.footerComponentIndex: return self[safe: indexPath.section]?.footer?.component
         default: return self[safe: indexPath.section]?.cells[safe: indexPath.row]?.component
+        }
+    }
+
+    @inlinable
+    func viewNode(for indexPath: IndexPath) -> ViewNode? {
+        switch indexPath.row {
+        case IndexPath.headerComponentIndex: return self[safe: indexPath.section]?.header
+        case IndexPath.footerComponentIndex: return self[safe: indexPath.section]?.footer
+        default: return nil
         }
     }
 

@@ -158,7 +158,13 @@ open class Renderer<Updater: Carbon.Updater> {
         guard let updatedComponent = component.as(ComponentUpdater.self)?.needChange(for: actionContent),
             let indexPath = actionContent.indexPath else { return }
         actionContent.component = updatedComponent
-        adapter.update(anyComponent: updatedComponent, for: indexPath)
+        if component.shouldContentUpdate(with: updatedComponent) {
+            var data = adapter.data
+            data.update(anyComponent: updatedComponent, for: indexPath)
+            render(data)
+        } else {
+            adapter.update(anyComponent: updatedComponent, for: indexPath)
+        }
     }
 }
 

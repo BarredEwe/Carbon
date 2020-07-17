@@ -121,10 +121,12 @@ extension UITableViewAdapter: UITableViewDataSource {
         let reuseIdentifier = node.component.reuseIdentifier
         let componentCell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as? UITableViewCell & ComponentRenderable
 
-        componentCell?.accessoryType = node.component(as: ComponentAppearance.self)?.accessoryType ?? .none
-        componentCell?.accessoryView = node.component(as: ComponentAppearance.self)?.accessoryView
-        componentCell?.tintColor = node.component(as: ComponentAppearance.self)?.tintColor
-        componentCell?.selectionStyle = node.component(as: ComponentAppearance.self)?.selectionStyle ?? .default
+        if let componentAppereance = node.component(as: ComponentAppearance.self) {
+            componentCell?.accessoryType = componentAppereance.accessoryType
+            componentCell?.accessoryView = componentAppereance.accessoryView
+            componentCell?.tintColor = componentAppereance.tintColor ?? componentCell?.tintColor
+            componentCell?.selectionStyle = componentAppereance.selectionStyle
+        }
 
         guard let cell = componentCell, cell.isMember(of: registration.class) else {
             tableView.register(cell: registration, forReuseIdentifier: reuseIdentifier)

@@ -56,6 +56,14 @@ public extension Adapter {
     public func component(for indexPath: IndexPath) -> AnyComponent? {
         return data.component(for: indexPath)
     }
+
+    /// Search for a component by optional indexPath
+    /// - Parameter indexPath: optional indexPath component
+    @inlinable
+    public func component(for indexPath: IndexPath?) -> AnyComponent? {
+        guard let indexPath = indexPath else { return nil }
+        return data.component(for: indexPath)
+    }
 }
 
 /// Methods of changing an array with data (data)

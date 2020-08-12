@@ -203,7 +203,7 @@ public extension Component {
             (view as? UICollectionViewComponentCell).flatMap({ $0.contentView }),
             let objectView = contentView.subviews.first as? Content,
             let view = objectView as? UIView else { return }
-        ComponentAction(.select, sender: view).invoke()
+        ComponentAction.invoke(.select, sender: view)
     }
 
     func call(_ action: AnyActionContent, in actions: [ActionType: Any]) {

@@ -2,6 +2,7 @@ import UIKit
 
 /// An updater for managing diffing updates to render data to the `UITableView`.
 open class UITableViewUpdater<Adapter: UITableViewAdapter>: Updater {
+
     /// An animation for section deletions. Default is fade.
     open var deleteSectionsAnimation = UITableView.RowAnimation.fade
 
@@ -44,6 +45,8 @@ open class UITableViewUpdater<Adapter: UITableViewAdapter>: Updater {
 
     /// A completion handler to be called after each updates.
     open var completion: (() -> Void)?
+
+    weak public var renderer: Renderer<UITableViewUpdater<UITableViewAdapter>>?
 
     /// Create a new updater.
     public init() {}

@@ -46,3 +46,8 @@ public class NodeComponent<T: IdentifiableComponent> {
     }
 }
 
+extension NodeComponent: CellsBuildable {
+    public func buildCells() -> [CellNode] {
+        [cellNode]
+    }
+}

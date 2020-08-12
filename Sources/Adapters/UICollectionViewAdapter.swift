@@ -11,6 +11,8 @@ open class UICollectionViewAdapter: NSObject, Adapter {
     /// The data to be rendered in the list UI.
     public var data: [Section]
 
+    weak public var renderer: RendererActions?
+
     /// A closure that to handle selection events of cell.
     open var didSelect: ((SelectionContext) -> Void)?
 

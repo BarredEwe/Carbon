@@ -4,6 +4,8 @@ import Foundation
 public protocol Adapter: class {
     /// The data to be rendered.
     var data: [Section] { get set }
+
+    var renderer: RendererActions? { get set }
 }
 
 public extension Adapter {

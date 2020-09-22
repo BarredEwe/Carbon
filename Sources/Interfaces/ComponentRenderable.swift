@@ -50,6 +50,7 @@ internal extension ComponentRenderable {
         case (let content?, _):
             component.render(in: content)
             renderedComponent = component
+            updateAppearance(for: content, component: component)
 
         case (nil, _):
             let content = component.renderContent()
@@ -57,6 +58,19 @@ internal extension ComponentRenderable {
             renderedContent = content
             render(component: component)
         }
+    }
+
+    /// Update UITableViewCell appearance
+    /// - Parameters:
+    ///   - content: A content of component that rendered on container.
+    ///   - component: A component to be rendered.
+    private func updateAppearance(for content: Any?, component: AnyComponent) {
+        guard let componentAppereance = component.as(ComponentAppearance.self),
+              let componentCell = (content as? UIView)?.superview?.superview as? UITableViewCell else { return }
+        componentCell.accessoryType = componentAppereance.accessoryType
+        componentCell.accessoryView = componentAppereance.accessoryView
+        componentCell.tintColor = componentAppereance.tintColor ?? componentCell.tintColor
+        componentCell.selectionStyle = componentAppereance.selectionStyle
     }
 }
 

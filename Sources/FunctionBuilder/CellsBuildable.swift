@@ -11,3 +11,11 @@ extension Optional: CellsBuildable where Wrapped: CellsBuildable {
         return self?.buildCells() ?? []
     }
 }
+
+extension Array: CellsBuildable where Element: CellsBuildable {
+    /// Build an array of cell.
+    @inlinable
+    public func buildCells() -> [CellNode] {
+        return flatMap { $0.buildCells() }
+    }
+}

@@ -158,6 +158,7 @@ struct MockSectionsBuildable: SectionsBuildable {
 }
 
 final class MockAdapter: Adapter, Equatable {
+    var renderer: RendererActions?
     var data: [Section] = []
 
     static func == (lhs: MockAdapter, rhs: MockAdapter) -> Bool {

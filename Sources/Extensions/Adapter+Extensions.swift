@@ -3,24 +3,24 @@ import UIKit
 public extension Adapter {
 
     @inlinable
-    public func component<Type: Hashable>(for id: Type) -> AnyComponent? {
+    func component<Type: Hashable>(for id: Type) -> AnyComponent? {
         return data.component(for: id)
     }
 
     @inlinable
-    public func indexPath(for cell: UITableViewComponentCell) -> IndexPath? {
+    func indexPath(for cell: UITableViewComponentCell) -> IndexPath? {
         guard let tableView = cell.superview as? UITableView else { return nil }
         return tableView.indexPath(for: cell)
     }
 
     @inlinable
-    public func indexPath(for cell: UICollectionViewComponentCell) -> IndexPath? {
+    func indexPath(for cell: UICollectionViewComponentCell) -> IndexPath? {
         guard let collectionView = cell.superview as? UICollectionView else { return nil }
         return collectionView.indexPath(for: cell)
     }
 
     @inlinable
-    public func indexPath(for headerFooterView: UITableViewComponentHeaderFooterView) -> IndexPath? {
+    func indexPath(for headerFooterView: UITableViewComponentHeaderFooterView) -> IndexPath? {
         guard let tableView = headerFooterView.superview as? UITableView else { return nil }
         return data.enumerated().lazy
             .filter { $0.element.header != nil || $0.element.footer != nil }
@@ -31,36 +31,36 @@ public extension Adapter {
     }
 
     @inlinable
-    public func indexPath(for id: AnyHashable) -> IndexPath? {
+    func indexPath(for id: AnyHashable) -> IndexPath? {
         return data.indexPath(for: id)
     }
 
     @inlinable
-    public func cellNode(for indexPath: IndexPath) -> CellNode? {
+    func cellNode(for indexPath: IndexPath) -> CellNode? {
         return cellNodes(in: indexPath.section)?[safe: indexPath.row]
     }
 
     @inlinable
-    public func viewNode(for indexPath: IndexPath) -> ViewNode? {
+    func viewNode(for indexPath: IndexPath) -> ViewNode? {
         data.viewNode(for: indexPath)
     }
 
     @inlinable
-    public func cellNodes(in section: Int) -> [CellNode]? {
+    func cellNodes(in section: Int) -> [CellNode]? {
         return data[safe: section]?.cells
     }
 
     /// Search for a component by indexPath
     /// - Parameter indexPath: indexPath component
     @inlinable
-    public func component(for indexPath: IndexPath) -> AnyComponent? {
+    func component(for indexPath: IndexPath) -> AnyComponent? {
         return data.component(for: indexPath)
     }
 
     /// Search for a component by optional indexPath
     /// - Parameter indexPath: optional indexPath component
     @inlinable
-    public func component(for indexPath: IndexPath?) -> AnyComponent? {
+    func component(for indexPath: IndexPath?) -> AnyComponent? {
         guard let indexPath = indexPath else { return nil }
         return data.component(for: indexPath)
     }
@@ -74,7 +74,7 @@ public extension Adapter {
     ///   - component: IdentifiableComponent object
     ///   - indexPath: IndexPath, according to which component should be updated
     @inlinable
-    public func update<Component: IdentifiableComponent>(component: Component?, for indexPath: IndexPath?) {
+    func update<Component: IdentifiableComponent>(component: Component?, for indexPath: IndexPath?) {
         data.update(component: component, for: indexPath)
     }
 
@@ -83,7 +83,7 @@ public extension Adapter {
     ///   - node: CellNode object
     ///   - indexPath: IndexPath by which node should be updated
     @inlinable
-    public func update(node: CellNode?, for indexPath: IndexPath?) {
+    func update(node: CellNode?, for indexPath: IndexPath?) {
         data.update(node: node, for: indexPath)
     }
 
@@ -92,7 +92,7 @@ public extension Adapter {
     ///   - node: ViewNode object
     ///   - indexPath: IndexPath by which node should be updated
     @inlinable
-    public func update(node: ViewNode?, for indexPath: IndexPath?) {
+    func update(node: ViewNode?, for indexPath: IndexPath?) {
         data.update(node: node, for: indexPath)
     }
 
@@ -101,14 +101,14 @@ public extension Adapter {
     ///   - node: AnyComponent object
     ///   - indexPath: IndexPath by which node should be updated
     @inlinable
-    public func update(anyComponent: AnyComponent?, for indexPath: IndexPath?) {
+    func update(anyComponent: AnyComponent?, for indexPath: IndexPath?) {
         data.update(anyComponent: anyComponent, for: indexPath)
     }
 
     /// Removing a CellNode object by the passed indexPath
     /// - Parameter indexPath:IndexPath by which node should be deleted
     @inlinable
-    public func removeNode(for indexPath: IndexPath?) {
+    func removeNode(for indexPath: IndexPath?) {
         data.removeNode(for: indexPath)
     }
 
@@ -117,7 +117,7 @@ public extension Adapter {
     ///   - node: CellNode object
     ///   - indexPath: IndexPath by which node should be inserted
     @inlinable
-    public func insert(node: CellNode, for indexPath: IndexPath?) {
+    func insert(node: CellNode, for indexPath: IndexPath?) {
         data.insert(node: node, for: indexPath)
     }
 }

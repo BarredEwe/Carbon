@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 public class ComponentAction {
     typealias NodeInfo = (actions: [ActionType: Any], component: AnyComponent)

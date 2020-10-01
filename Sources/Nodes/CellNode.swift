@@ -1,3 +1,4 @@
+import UIKit
 import DifferenceKit
 
 /// The node for cell that can be uniquely identified.

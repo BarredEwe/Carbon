@@ -2,12 +2,12 @@ import Foundation
 
 public extension IndexPath {
     @inlinable
-    static public var headerComponentIndex: Int {
+    static var headerComponentIndex: Int {
         return -1
     }
 
     @inlinable
-    static public var footerComponentIndex: Int {
+    static var footerComponentIndex: Int {
         return -2
     }
 }

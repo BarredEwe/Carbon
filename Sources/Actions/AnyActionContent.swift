@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 /// Type erased action content
 public struct AnyActionContent {

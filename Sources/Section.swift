@@ -42,7 +42,7 @@ public struct Section {
     ///   - header: A node for header view.
     ///   - cells: A collection of nodes for cells.
     ///   - footer: A node for footer view.
-    public init<I: Hashable, C: Swift.Collection>(id: I, header: ViewNode? = nil, cells: C, footer: ViewNode? = nil) where C.Element == CellNode {
+    public init<I: Hashable, C: Swift.Collection>(id: I, header: ViewNode? = nil, footer: ViewNode? = nil, cells: C) where C.Element == CellNode {
         // This is workaround for avoid redundant `AnyHashable` wrapping.
         if type(of: id) == AnyHashable.self {
             self.id = unsafeBitCast(id, to: AnyHashable.self)
@@ -65,12 +65,12 @@ public struct Section {
     ///   - header: A node for header view.
     ///   - cells: A collection of nodes for cells that can be contains nil.
     ///   - footer: A node for footer view.
-    public init<I: Hashable, C: Swift.Collection>(id: I, header: ViewNode? = nil, cells: C, footer: ViewNode? = nil) where C.Element == CellNode? {
+    public init<I: Hashable, C: Swift.Collection>(id: I, header: ViewNode? = nil, footer: ViewNode? = nil, cells: C) where C.Element == CellNode? {
         self.init(
             id: id,
             header: header,
-            cells: cells.compactMap { $0 },
-            footer: footer
+            footer: footer,
+            cells: cells.compactMap { $0 }
         )
     }
 
@@ -84,8 +84,8 @@ public struct Section {
         self.init(
             id: id,
             header: header,
-            cells: [],
-            footer: footer
+            footer: footer,
+            cells: []
         )
     }
 
@@ -112,8 +112,42 @@ public struct Section {
         self.init(
             id: id,
             header: header.map(ViewNode.init),
-            cells: cells().buildCells(),
-            footer: footer.map(ViewNode.init)
+            footer: footer.map(ViewNode.init),
+            cells: cells().buildCells()
+        )
+    }
+
+    /// Create a section wrapping given id, header, footer and cell nodes.
+    ///
+    /// - Note: The nil contained in the collection of cell nodes is removed.
+    ///
+    /// - Parameters:
+    ///   - id: An identifier to be wrapped.
+    ///   - header: A header component.
+    ///   - footer: A footer component.
+    ///   - cells: A collection of nodes for cells that can be contains nil.
+    public init<I: Hashable, H: Component, F: Component, C: Swift.Collection>(id: I, header: H?, footer: F?, cells: C) where C.Element == CellNode? {
+        self.init(
+            id: id,
+            header: header.map(ViewNode.init),
+            footer: footer.map(ViewNode.init),
+            cells: cells
+        )
+    }
+
+    /// Create a section wrapping given id, header, footer and cell nodes.
+    ///
+    /// - Parameters:
+    ///   - id: An identifier to be wrapped.
+    ///   - header: A header component.
+    ///   - footer: A footer component.
+    ///   - cells: A collection of nodes for cells.
+    public init<I: Hashable, H: Component, F: Component, C: Swift.Collection>(id: I, header: H?, footer: F?, cells: C) where C.Element == CellNode {
+        self.init(
+            id: id,
+            header: header.map(ViewNode.init),
+            footer: footer.map(ViewNode.init),
+            cells: cells
         )
     }
 
@@ -145,6 +179,36 @@ public struct Section {
         )
     }
 
+    /// Create a section wrapping given id, header and cells nodes.
+    ///
+    /// - Parameters:
+    ///   - id: An identifier to be wrapped.
+    ///   - header: A header component.
+    ///   - cells: A collection of nodes for cells.
+    public init<I: Hashable, H: Component, C: Swift.Collection>(id: I, header: H?, cells: C) where C.Element == CellNode {
+        self.init(
+            id: id,
+            header: header.map(ViewNode.init),
+            cells: cells
+        )
+    }
+
+    /// Create a section wrapping given id, header and cells nodes.
+    ///
+    /// - Note: The nil contained in the collection of cell nodes is removed.
+    ///
+    /// - Parameters:
+    ///   - id: An identifier to be wrapped.
+    ///   - header: A header component.
+    ///   - cells: A collection of nodes for cells that can be contains nil.
+    public init<I: Hashable, H: Component, C: Swift.Collection>(id: I, header: H?, cells: C) where C.Element == CellNode? {
+        self.init(
+            id: id,
+            header: header.map(ViewNode.init),
+            cells: cells
+        )
+    }
+
     /// Create a section wrapping given id, footer and cells with function builder syntax.
     ///
     /// - Parameters:
@@ -154,8 +218,38 @@ public struct Section {
     public init<I: Hashable, F: Component, C: CellsBuildable>(id: I, footer: F?, @CellsBuilder cells: () -> C) {
         self.init(
             id: id,
-            cells: cells().buildCells(),
-            footer: footer.map(ViewNode.init)
+            footer: footer.map(ViewNode.init),
+            cells: cells().buildCells()
+        )
+    }
+
+    /// Create a section wrapping given id, footer and cells nodes.
+    ///
+    /// - Parameters:
+    ///   - id: An identifier to be wrapped.
+    ///   - footer: A footer component.
+    ///   - cells: A collection of nodes for cells.
+    public init<I: Hashable, F: Component, C: Swift.Collection>(id: I, footer: F?, cells: C) where C.Element == CellNode {
+        self.init(
+            id: id,
+            footer: footer.map(ViewNode.init),
+            cells: cells
+        )
+    }
+
+    /// Create a section wrapping given id, footer and cells nodes.
+    ///
+    /// - Note: The nil contained in the collection of cell nodes is removed.
+    /// 
+    /// - Parameters:
+    ///   - id: An identifier to be wrapped.
+    ///   - footer: A footer component.
+    ///   - cells: A collection of nodes for cells that can be contains nil.
+    public init<I: Hashable, F: Component, C: Swift.Collection>(id: I, footer: F?, cells: C) where C.Element == CellNode? {
+        self.init(
+            id: id,
+            footer: footer.map(ViewNode.init),
+            cells: cells
         )
     }
 
@@ -214,6 +308,6 @@ extension Section: DifferentiableSection {
     /// Creates a new section reproducing the given source section with replacing the elements.
     @inlinable
     public init<C: Swift.Collection>(source: Section, elements cells: C) where C.Element == CellNode {
-        self.init(id: source.id, header: source.header, cells: cells, footer: source.footer)
+        self.init(id: source.id, header: source.header, footer: source.footer, cells: cells)
     }
 }

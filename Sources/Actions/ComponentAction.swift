@@ -3,6 +3,7 @@ import UIKit
 public class ComponentAction {
     typealias NodeInfo = (actions: [ActionType: Any], component: AnyComponent)
 
+    public static var defaultActionDelegate: ActionsDelegate?
 
     /// Starting action processing
     /// - Parameters:
@@ -11,23 +12,35 @@ public class ComponentAction {
     ///   - sender: Content view for component
     static public func invoke(_ actionType: ActionType, sender: UIView?, userInfo: [AnyHashable: Any]? = nil) {
         guard let view = sender,
-            let cell = view.superview?.superview,
-            let target = cell.superview,
-            let adapter = adapterTarget(for: target),
-            let indexPath = indexPath(for: cell, in: adapter),
-            let nodeInfo = nodeInfo(for: indexPath, in: adapter),
-            let actionComponent = nodeInfo.component.as(ComponentAnyActionable.self) else { return }
+              let cell = view.superview?.superview,
+              let target = cell.superview,
+              let adapter = adapterTarget(for: target),
+              let indexPath = indexPath(for: cell, in: adapter),
+              let nodeInfo = nodeInfo(for: indexPath, in: adapter),
+              let actionComponent = nodeInfo.component.as(ComponentAnyActionable.self) else {
+            return directInvoke(actionType, sender: sender, userInfo: userInfo)
+        }
 
         var actionContent = AnyActionContent(view: view, component: nodeInfo.component, type: actionType,
                                              target: target, indexPath: indexPath, userInfo: userInfo)
 
         processChangeNode(component: nodeInfo.component, for: &actionContent, with: adapter)
-        adapter.renderer?.actionsDelegate?.did(action: actionContent)
+        (adapter.renderer?.actionsDelegate ?? defaultActionDelegate)?.did(action: actionContent)
         actionContent.component = adapter.component(for: indexPath)
         actionComponent.call(actionContent, in: nodeInfo.actions)
     }
 
     // MARK: Private Methods
+    private static func directInvoke(_ actionType: ActionType, sender: UIView?, userInfo: [AnyHashable: Any]? = nil) {
+        guard let view = sender,
+              let component = view.component,
+              let actionComponent = component.component(as: ComponentAnyActionable.self) else { return }
+
+        let actionContent = AnyActionContent(view: view, component: component.component, type: actionType, target: nil, indexPath: nil, userInfo: userInfo)
+        defaultActionDelegate?.did(action: actionContent)
+        actionComponent.call(actionContent, in: component.actions)
+    }
+
     private static func adapterTarget(for target: UIView) -> Adapter? {
         ((target as? UITableView)?.dataSource as? Adapter) ?? ((target as? UICollectionView)?.dataSource as? Adapter)
     }

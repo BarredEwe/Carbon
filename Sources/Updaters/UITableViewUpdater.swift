@@ -163,7 +163,9 @@ open class UITableViewUpdater<Adapter: UITableViewAdapter>: Updater {
                             for indexPath in updatedIndexPaths {
                                 let cellNode = adapter.cellNode(at: indexPath)
                                 let cell = target.cellForRow(at: indexPath) as? ComponentRenderable
+                                target.beginUpdates()
                                 cell?.render(component: cellNode.component)
+                                target.endUpdates()
                             }
                         } else {
                             target.reloadRows(at: updatedIndexPaths, with: reloadRowsAnimation)

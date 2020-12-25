@@ -161,11 +161,16 @@ open class UITableViewUpdater<Adapter: UITableViewAdapter>: Updater {
                         let updatedIndexPaths = changeset.elementUpdated.map { IndexPath(row: $0.element, section: $0.section) }
                         if updateElementWithoutReloading {
                             for indexPath in updatedIndexPaths {
-                                let cellNode = adapter.cellNode(at: indexPath)
-                                let cell = target.cellForRow(at: indexPath) as? ComponentRenderable
-                                target.beginUpdates()
-                                cell?.render(component: cellNode.component)
-                                target.endUpdates()
+                                if #available(iOS 13.0, *) {
+                                    let cellNode = adapter.cellNode(at: indexPath)
+                                    let cell = target.cellForRow(at: indexPath) as? ComponentRenderable
+                                    cell?.render(component: cellNode.component)
+                                } else {
+                                    UIView.setAnimationsEnabled(false)
+                                    let cellNode = adapter.cellNode(at: indexPath)
+                                    let cell = target.cellForRow(at: indexPath) as? ComponentRenderable
+                                    cell?.render(component: cellNode.component)
+                                }
                             }
                         } else {
                             target.reloadRows(at: updatedIndexPaths, with: reloadRowsAnimation)

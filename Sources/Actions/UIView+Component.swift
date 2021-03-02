@@ -19,6 +19,11 @@ public extension NodeComponent {
         (content as? UIView)?.component = cellNode
         return content
     }
+
+    func render(in content: T.Content) {
+        component.render(in: content)
+        (content as? UIView)?.component = cellNode
+    }
 }
 
 public extension IdentifiableComponent {

@@ -33,6 +33,21 @@ public class NodeComponent<T: IdentifiableComponent> {
         return self
     }
 
+    /// Returns a `Bool` value indicating whether the content should be reloaded.
+    ///
+    /// - Note: Unlike `Equatable`, this doesn't compare whether the two values
+    ///         exactly equal. It's can be ignore property comparisons, if not expect
+    ///         to reload content.
+    ///
+    /// - Parameter:
+    ///   - next: The next value to be compared to the receiver.
+    ///
+    /// - Returns: A `Bool` value indicating whether the content should be reloaded.
+    @inlinable
+    public func shouldContentUpdate(with next: T) -> Bool {
+        return component.shouldContentUpdate(with: next)
+    }
+
     public var cellNode: CellNode {
         let cellNode = CellNode(component)
         cellNode.actions = actions

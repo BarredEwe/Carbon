@@ -1,5 +1,6 @@
 import UIKit
 
+@available(*, deprecated, message: "Please, use ActionDelegate instead")
 public class ComponentAction {
     typealias NodeInfo = (actions: [ActionType: Any], component: AnyComponent)
 

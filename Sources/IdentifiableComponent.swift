@@ -40,6 +40,7 @@ public extension IdentifiableComponent {
     ///   - action: Specific type of Action
     ///   - closure: Сlosure with parameters caused by a specific action
     /// - Returns: NodeComponent
+    @available(*, deprecated, renamed: "on(action:completion:)", message: "Please, use ActionDelegate instead")
     @inlinable
     func on(_ action: ActionType, _ closure: @escaping ItemClosure<Self>) -> NodeComponent<Self> {
         return NodeComponent(component: self)
@@ -51,6 +52,7 @@ public extension IdentifiableComponent {
     ///   - action: Specific type of Action
     ///   - closure: Сlosure without parameters caused by a specific action
     /// - Returns: NodeComponent
+    @available(*, deprecated, renamed: "on(action:completion:)", message: "Please, use ActionDelegate instead")
     @inlinable
     func on(_ action: ActionType, _ closure: @escaping () -> Void) -> NodeComponent<Self> {
         return NodeComponent(component: self)

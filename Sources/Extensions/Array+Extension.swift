@@ -6,6 +6,7 @@ public extension Array where Element == Section {
     /// - Parameters:
     ///   - node: IdentifiableComponent object
     ///   - indexPath: IndexPath by which node should be updated
+    /// - Complexity: O(1)
     @inlinable
     mutating func update<Component: IdentifiableComponent>(component: Component?, for indexPath: IndexPath?) {
         guard let indexPath = indexPath else { return }
@@ -20,6 +21,7 @@ public extension Array where Element == Section {
     /// - Parameters:
     ///   - node: CellNode object
     ///   - indexPath: IndexPath by which node should be updated
+    /// - Complexity: O(1)
     @inlinable
     mutating func update(node: CellNode?, for indexPath: IndexPath?) {
         guard let indexPath = indexPath else { return }
@@ -30,6 +32,7 @@ public extension Array where Element == Section {
     /// - Parameters:
     ///   - node: ViewNode object
     ///   - indexPath: IndexPath by which node should be updated
+    /// - Complexity: O(1)
     @inlinable
     mutating func update(node: ViewNode?, for indexPath: IndexPath?) {
         guard let indexPath = indexPath else { return }
@@ -44,6 +47,7 @@ public extension Array where Element == Section {
     /// - Parameters:
     ///   - node: AnyComponent object
     ///   - indexPath: IndexPath by which node should be updated
+    /// - Complexity: O(1)
     @inlinable
     mutating func update(anyComponent: AnyComponent?, for indexPath: IndexPath?) {
         guard let indexPath = indexPath else { return }
@@ -79,6 +83,7 @@ public extension Array where Element == Section {
 
     /// Search for an item by id
     /// - Parameter id: id item
+    /// - Complexity: O(n*m), where *n* is the length of the collection sections, and where m* is the length of the collection cells
     @inlinable
     func component<Type: Hashable>(for id: Type) -> AnyComponent? {
         return compactMap { section in

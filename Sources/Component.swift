@@ -34,7 +34,7 @@ import UIKit
 ///             }
 ///         }
 ///     }
-public protocol Component: ComponentAnyActionable, ComponentAppearance, ComponentUpdater {
+public protocol Component: Equatable, ComponentAnyActionable, ComponentAppearance, ComponentUpdater {
     /// A type that represents a content to be render on the element of list UI.
     associatedtype Content
 

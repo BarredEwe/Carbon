@@ -1,32 +1,5 @@
 import UIKit
 
-public protocol Wrappable {}
-
-extension UIControl.Event: Hashable {}
-
-public extension Wrappable {
-
-    public var actionView: ActionViewWrapper<Self> {
-        ActionViewWrapper<Self>(view: self)
-    }
-
-    public var wrapperView: WrapperUIView<ActionViewWrapper<Self>> {
-        WrapperUIView(view: actionView)
-    }
-}
-
-extension UIView: Wrappable {}
-
-extension UIView: CellsBuildable {
-    public var cellNode: CellNode {
-        wrapperView.cellNode
-    }
-
-    public func buildCells() -> [CellNode] {
-        [cellNode]
-    }
-}
-
 public class ActionViewWrapper<View>: UIView, ActionableView {
     public var view: View
 

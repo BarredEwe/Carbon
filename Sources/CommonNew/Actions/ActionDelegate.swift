@@ -4,7 +4,7 @@ public class ActionDelegate<View: ActionableComponent>: Equatable {
     var view: View
     private var actions: [View.Content.Action: ActionCompletion<View>] = [:]
 
-    init(view: View) {
+    public init(view: View) {
         self.view = view
     }
 
@@ -28,8 +28,15 @@ public class ActionDelegate<View: ActionableComponent>: Equatable {
               let target = (sender as? UIView)?.superview(as: UITableView.self),
               let adapter = target.dataSource as? Adapter else { return }
 
-        self.view = newView
-        adapter.renderer?.render(adapter.data)
+        if let indexPath = adapter.data.indexPath(for: view.id), view.shouldContentUpdate(with: newView) {
+            view = newView
+            var data = adapter.data
+            data.update(component: view, for: indexPath)
+            adapter.renderer?.render(data)
+        } else {
+            view = newView
+            adapter.renderer?.render(adapter.data)
+        }
     }
 }
 

@@ -11,12 +11,12 @@ public protocol ActionableView: AnyObject {
 private var AssociatedObjectHandle: UInt8 = 0
 
 public extension ActionableView {
-    weak var actionDelegate: ActionDelegate<Item>? {
+    var actionDelegate: ActionDelegate<Item>? {
         get {
             objc_getAssociatedObject(self, &AssociatedObjectHandle) as? ActionDelegate<Item>
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedObjectHandle, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &AssociatedObjectHandle, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
 }

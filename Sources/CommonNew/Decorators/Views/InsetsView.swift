@@ -1,4 +1,4 @@
-import Carbon
+import UIKit
 
 public struct InsetsView<View: IdentifiableComponent>: DecorationView {
     public let id: View.ID

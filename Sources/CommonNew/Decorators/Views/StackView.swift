@@ -1,4 +1,4 @@
-import Carbon
+import UIKit
 
 public struct StackView: IdentifiableComponent {
     public let id: String

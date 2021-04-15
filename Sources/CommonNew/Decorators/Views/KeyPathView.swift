@@ -1,4 +1,4 @@
-import Carbon
+import UIKit
 
 public struct KeyPathView<View: IdentifiableComponent, T: Equatable>: DecorationView {
     public let id: View.ID

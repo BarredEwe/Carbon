@@ -1,4 +1,4 @@
-import Carbon
+import UIKit
 
 public struct WrapperView<View: IdentifiableComponent>: IdentifiableComponent {
     public let id: View.ID

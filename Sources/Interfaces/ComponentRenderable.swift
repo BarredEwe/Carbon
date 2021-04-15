@@ -67,10 +67,10 @@ internal extension ComponentRenderable {
     private func updateAppearance(for content: Any?, component: AnyComponent) {
         guard let componentAppereance = component.as(ComponentAppearance.self),
               let componentCell = (content as? UIView)?.superview?.superview as? UITableViewCell else { return }
-        componentCell.accessoryType = componentAppereance.accessoryType
-        componentCell.accessoryView = componentAppereance.accessoryView
+        componentCell.accessoryType = componentAppereance.accessoryType ?? componentCell.accessoryType
+        componentCell.accessoryView = componentAppereance.accessoryView ?? componentCell.accessoryView
         componentCell.tintColor = componentAppereance.tintColor ?? componentCell.tintColor
-        componentCell.selectionStyle = componentAppereance.selectionStyle
+        componentCell.selectionStyle = componentAppereance.selectionStyle ?? componentCell.selectionStyle
     }
 }
 

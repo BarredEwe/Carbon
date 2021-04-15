@@ -38,14 +38,3 @@ public extension ActionDelegate {
         lhs.view == rhs.view && Set(lhs.actions.keys) == Set(rhs.actions.keys)
     }
 }
-
-private extension UIView {
-    func superview<T>(as type: T.Type) -> T? {
-        if let type = self as? T {
-            return type
-        } else if let type = superview as? T {
-            return type
-        }
-        return superview?.superview(as: type)
-    }
-}

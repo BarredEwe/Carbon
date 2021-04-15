@@ -30,6 +30,14 @@ public extension IdentifiableComponent where Self: Equatable {
     }
 
     @inlinable
+    func cellAppearance(accessoryType: UITableViewCell.AccessoryType = .none,
+               accessoryView: AccessoryView? = nil,
+               selectStyle: UITableViewCell.SelectionStyle = .none,
+               tintColor: UIColor? = nil) -> TableAppearanceView<Self> {
+        TableAppearanceView(id: id, view: self, accessoryType: accessoryType, accessoryView: accessoryView, selectStyle: selectStyle, tintColor: tintColor)
+    }
+
+    @inlinable
     func on(action: DefaultAction, _ completion: @escaping () -> ()) -> SelectView<Self> {
         switch action {
         case .select:

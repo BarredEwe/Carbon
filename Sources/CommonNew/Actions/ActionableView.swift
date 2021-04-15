@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol ActionableView: UIView {
+public protocol ActionableView: AnyObject {
     associatedtype Action: Hashable
     associatedtype Item: ActionableComponent
     associatedtype ItemInfo = Void

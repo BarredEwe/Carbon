@@ -1,7 +1,12 @@
 import UIKit
 
 /// A type-erased component.
-public struct AnyComponent: Component {
+public struct AnyComponent: IdentifiableComponent {
+
+    public var id: String {
+        (Mirror(reflecting: base).children.first(where: { $0.label == "id" })?.value as? String) ?? ""
+    }
+
     @usableFromInline
     internal let box: AnyComponentBox
 

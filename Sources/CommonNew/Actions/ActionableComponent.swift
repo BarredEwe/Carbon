@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol ActionableComponent: IdentifiableComponent where Content: ActionableView, Content.Item == Self {
+public protocol ActionableComponent: IdentifiableComponent where Content: ActionableView {
     func needChange(for action: Content.Action, info: Content.ItemInfo) -> Self?
 }
 

@@ -10,3 +10,10 @@ extension UIView {
         return superview?.superview(as: type)
     }
 }
+
+extension UIButton {
+    public var title: String? {
+        get { currentTitle }
+        set { setTitle(newValue, for: .normal) }
+    }
+}

@@ -55,7 +55,5 @@ public extension DecorationView {
         view.intrinsicContentSize(for: content)
     }
 
-    func prepare(content: UIView) {
-        assertionFailure("Its necessary to implement!!")
-    }
+    func prepare(content: UIView) { }
 }

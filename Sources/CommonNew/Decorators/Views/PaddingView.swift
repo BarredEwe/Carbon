@@ -1,6 +1,6 @@
 import UIKit
 
-public struct InsetsView<View: IdentifiableComponent>: DecorationView {
+public struct PaddingView<View: IdentifiableComponent>: DecorationView {
     public let id: View.ID
     public let view: View
 
@@ -20,20 +20,6 @@ public struct InsetsView<View: IdentifiableComponent>: DecorationView {
 
     public func prepare(content: UIView) {
         guard let container = content.superview else { return }
-
-        if let top = top {
-            container.constraints.first { $0.secondAnchor == content.topAnchor }?.constant = -top
-        }
-        if let bottom = bottom {
-            container.constraints.first { $0.secondAnchor == content.bottomAnchor }?.constant = bottom
-        }
-        if let left = left {
-            container.constraints.first { $0.secondAnchor == content.leadingAnchor }?.constant = -left
-        }
-        if let right = right {
-            container.constraints.first { $0.secondAnchor == content.trailingAnchor }?.constant = right
-        }
-
         if let top = top {
             container.constraints.first { $0.firstAnchor == content.topAnchor }?.constant = top
         }

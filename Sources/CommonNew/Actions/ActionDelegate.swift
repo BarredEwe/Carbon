@@ -2,13 +2,13 @@ import Carbon
 
 public class ActionDelegate<View: ActionableComponent>: Equatable {
     var view: View
-    private var actions: [View.Content.Action: Action<View>] = [:]
+    private var actions: [View.Content.Action: ActionCompletion<View>] = [:]
 
     init(view: View) {
         self.view = view
     }
 
-    func append(completion: @escaping Action<View>, for action: View.Content.Action) {
+    func append(completion: @escaping ActionCompletion<View>, for action: View.Content.Action) {
         actions[action] = completion
     }
 
@@ -25,7 +25,7 @@ public class ActionDelegate<View: ActionableComponent>: Equatable {
     // MARK: Private Methods
     private func updateView(action: View.Content.Action, sender: View.Content, info: View.Content.ItemInfo) {
         guard let newView = view.needChange(for: action, info: info),
-              let target = sender.superview(as: UITableView.self),
+              let target = (sender as? UIView)?.superview(as: UITableView.self),
               let adapter = target.dataSource as? Adapter else { return }
 
         self.view = newView

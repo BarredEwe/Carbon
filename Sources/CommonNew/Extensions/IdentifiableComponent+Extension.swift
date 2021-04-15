@@ -1,12 +1,17 @@
 public extension IdentifiableComponent where Self: Equatable {
     @inlinable
-    func size(_ size: CGSize) -> SizeView<Self> {
-        SizeView(id: id, view: self, size: size)
+    func size(width: CGFloat, height: CGFloat) -> SizeView<Self> {
+        SizeView(id: id, view: self, size: .init(width: width, height: height))
     }
 
     @inlinable
-    func insets(_ insets: UIEdgeInsets) -> InsetsView<Self> {
-        InsetsView(id: id, view: self, insets: insets)
+    func insets(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil) -> InsetsView<Self> {
+        InsetsView(id: id, view: self, top: top, bottom: bottom, left: left, right: right)
+    }
+
+    @inlinable
+    func padding(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil) -> PaddingView<Self> {
+        PaddingView(id: id, view: self, top: top, bottom: bottom, left: left, right: right)
     }
 
     @inlinable
@@ -31,10 +36,17 @@ public extension IdentifiableComponent where Self: Equatable {
 
     @inlinable
     func cellAppearance(accessoryType: UITableViewCell.AccessoryType = .none,
-               accessoryView: AccessoryView? = nil,
-               selectStyle: UITableViewCell.SelectionStyle = .none,
-               tintColor: UIColor? = nil) -> TableAppearanceView<Self> {
-        TableAppearanceView(id: id, view: self, accessoryType: accessoryType, accessoryView: accessoryView, selectStyle: selectStyle, tintColor: tintColor)
+                        accessoryView: AccessoryView? = nil,
+                        selectStyle: UITableViewCell.SelectionStyle = .none,
+                        tintColor: UIColor? = nil,
+                        separatorInset: UIEdgeInsets? = nil) -> TableAppearanceView<Self> {
+        TableAppearanceView(id: id,
+                            view: self,
+                            accessoryType: accessoryType,
+                            accessoryView: accessoryView,
+                            selectStyle: selectStyle,
+                            tintColor: tintColor,
+                            separatorInset: separatorInset)
     }
 
     @inlinable
@@ -48,7 +60,7 @@ public extension IdentifiableComponent where Self: Equatable {
 
 public extension ActionableComponent {
     @inlinable
-    func on(action: Content.Action, completion: @escaping Action<Self>) -> ActionView<Self> {
+    func on(action: Content.Action, completion: @escaping ActionCompletion<Self>) -> ActionView<Self> {
         ActionView(id: id, view: self, action: action, completion: completion)
     }
 

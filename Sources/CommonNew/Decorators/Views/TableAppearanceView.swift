@@ -10,19 +10,22 @@ public struct TableAppearanceView<View: IdentifiableComponent>: DecorationView {
     public let accessoryView: AccessoryView?
     public let selectionStyle: UITableViewCell.SelectionStyle
     public let tintColor: UIColor?
+    public let separatorInset: UIEdgeInsets?
 
     public init(id: View.ID,
                 view: View,
                 accessoryType: UITableViewCell.AccessoryType = .none,
                 accessoryView: AccessoryView? = nil,
                 selectStyle: UITableViewCell.SelectionStyle = .none,
-                tintColor: UIColor? = nil) {
+                tintColor: UIColor? = nil,
+                separatorInset: UIEdgeInsets? = nil) {
         self.id = id
         self.view = view
         self.accessoryType = accessoryType
         self.accessoryView = accessoryView
         self.selectionStyle = selectStyle
         self.tintColor = tintColor
+        self.separatorInset = separatorInset
     }
 
     public func prepare(content: UIView) {
@@ -31,5 +34,6 @@ public struct TableAppearanceView<View: IdentifiableComponent>: DecorationView {
         componentCell.accessoryView = accessoryView
         componentCell.tintColor = tintColor ?? componentCell.tintColor
         componentCell.selectionStyle = selectionStyle
+        componentCell.separatorInset = separatorInset ?? componentCell.superview(as: UITableView.self)?.separatorInset ?? componentCell.separatorInset
     }
 }

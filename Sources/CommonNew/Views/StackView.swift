@@ -22,6 +22,20 @@ public struct StackView: IdentifiableComponent {
         self.components = components
     }
 
+    public init<C: CellsBuildable>(id: String,
+                axis: NSLayoutConstraint.Axis,
+                alignment: UIStackView.Alignment,
+                distribution: UIStackView.Distribution,
+                spacing: CGFloat,
+                @CellsBuilder cells: () -> C) {
+        self.id = id
+        self.axis = axis
+        self.alignment = alignment
+        self.distribution = distribution
+        self.spacing = spacing
+        self.components = cells().buildCells().map(\.component)
+    }
+
     public func renderContent() -> UIStackView {
         let stackView = UIStackView()
         stackView.axis = axis

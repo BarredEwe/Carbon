@@ -27,7 +27,7 @@ public class ComponentAction {
         processChangeNode(component: nodeInfo.component, for: &actionContent, with: adapter)
         (adapter.renderer?.actionsDelegate ?? defaultActionDelegate)?.did(action: actionContent)
         actionContent.component = adapter.component(for: indexPath)
-        actionComponent.call(actionContent, in: nodeInfo.actions)
+        actionContent.component?.as(ComponentAnyActionable.self)?.call(actionContent, in: nodeInfo.actions)
     }
 
     // MARK: Private Methods

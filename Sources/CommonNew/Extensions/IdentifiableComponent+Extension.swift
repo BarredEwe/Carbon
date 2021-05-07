@@ -69,3 +69,65 @@ public extension ActionableComponent {
         ActionView(id: id, view: self, action: action, completion: { _, _ in completion() })
     }
 }
+
+public extension IdentifiableComponent {
+    @inlinable
+    func cornerRadius(_ radius: CGFloat) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            (($0 as? UIView) ?? ($0 as? ActionViewWrapper<UIView>)?.view)?.layer.cornerRadius = radius
+        }
+    }
+
+    @inlinable
+    func background(_ color: UIColor) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            (($0 as? UIView) ?? ($0 as? ActionViewWrapper<UIView>)?.view)?.backgroundColor = color
+        }
+    }
+}
+
+public extension IdentifiableComponent where Self.Content == ActionViewWrapper<UILabel> {
+    @inlinable
+    func font(_ font: UIFont) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            $0.view.font = font
+        }
+    }
+
+    @inlinable
+    func text(_ string: String?) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            $0.view.text = string
+        }
+    }
+
+    @inlinable
+    func lines(_ number: Int) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            $0.view.numberOfLines = number
+        }
+    }
+
+    @inlinable
+    func foregroundColor(_ color: UIColor) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            $0.view.textColor = color
+        }
+    }
+}
+
+public extension IdentifiableComponent where Self.Content == ActionViewWrapper<UIButton> {
+    @inlinable
+    func text(_ string: String?) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            $0.view.setTitle(string, for: .normal)
+        }
+    }
+
+    @inlinable
+    func foregroundColor(_ color: UIColor) -> UpdateView<Self> {
+        UpdateView(id: id, view: self) {
+            $0.view.setTitleColor(color, for: .normal)
+        }
+    }
+}

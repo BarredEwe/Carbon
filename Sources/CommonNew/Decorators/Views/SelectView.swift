@@ -6,10 +6,13 @@ public struct SelectView<View: IdentifiableComponent>: DecorationView {
 
     private let tapRecognizer: UITapGestureRecognizer
 
-    public init(id: View.ID, view: View, completion: @escaping () -> ()) {
+    public init(id: View.ID, view: View, completion: @escaping (View, View.Content) -> ()) {
         self.id = id
         self.view = view
-        tapRecognizer = BindableGestureRecognizer { completion() }
+        tapRecognizer = BindableGestureRecognizer { content in
+            guard let content = content as? View.Content else { return }
+            completion(view, content)
+        }
     }
 
     public func prepare(content: UIView) {

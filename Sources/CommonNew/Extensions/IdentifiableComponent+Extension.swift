@@ -51,6 +51,11 @@ public extension IdentifiableComponent where Self: Equatable {
 
     @inlinable
     func on(action: DefaultAction, _ completion: @escaping () -> ()) -> SelectView<Self> {
+        on(action: action, { _, _ in completion() })
+    }
+
+    @inlinable
+    func on(action: DefaultAction, _ completion: @escaping (Self, Self.Content) -> ()) -> SelectView<Self> {
         switch action {
         case .select:
             return SelectView(id: id, view: self, completion: completion)
